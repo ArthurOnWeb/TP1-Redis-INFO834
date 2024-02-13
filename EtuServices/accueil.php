@@ -1,10 +1,20 @@
 <?php
-// Command to execute the Python script
+// Chemin vers le script Python
 $command = "python3 /var/www/html/TP1-Redis-INFO834/AdminServices/TP1Redis.py";
 
-// Execute the command and capture the output
-$output = exec($command);
+// Nom de l'utilisateur (remplacez-le par la valeur réelle)
+$nomUtilisateur = 'Arthur';
 
-// Output the result
-echo "Result of Python script execution: " . $output;
+// Exécution du script Python et récupération du résultat
+$resultat = shell_exec("$command $nomUtilisateur");
+
+// Vérification du résultat
+if (trim($resultat) === "L'utilisateur $nomUtilisateur est autorisé à se connecter.") {
+    // Connexion autorisée, redirigez l'utilisateur vers une page de service
+    header("Location: services_autorises.php");
+    exit();
+} else {
+    // Connexion refusée, affichez un message d'erreur
+    echo "Connexion refusée : $resultat";
+}
 ?>
