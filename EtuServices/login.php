@@ -5,18 +5,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nom_utilisateur = $_POST["nom_utilisateur"];
     $mot_de_passe = $_POST["mot_de_passe"];
 
-    // Exécuter le script Python pour vérifier l'authentification
-    $command = "python3 /var/www/html/TP1-Redis-INFO834/AdminServices/TP1Redis.py $nom_utilisateur $mot_de_passe";
-    $resultat = shell_exec($command);
+    // Vérifier l'authentification dans MySQL
+    $mysql_host = 'localhost';
+    $mysql_user = 'root';
+    $mysql_password = ''; // Mettez votre mot de passe MySQL ici
+    $mysql_database = 'etuServicesDB';
 
-    // Analyser la réponse du script Python
-    if (trim($resultat) === "Connexion réussie") {
-        // Rediriger vers la page d'accueil ou une autre page après la connexion réussie
-        header("Location: home.php");
-        exit;
+    $conn = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_database);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $sql = "SELECT * FROM utilisateurs WHERE nom='$nom_utilisateur' AND motDePasse='$mot_de_passe'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // L'utilisateur est authentifié dans MySQL, vérifiez dans Redis
+        $command = "python3 /var/www/html/TP1-Redis-INFO834/AdminServices/Redislogin.py $nom_utilisateur $mot_de_passe";
+        $resultat = shell_exec($command);
+
+        // Analyser la réponse du script Python
+        if (trim($resultat) === "Connexion réussie") {
+            // Rediriger vers la page d'accueil ou une autre page après la connexion réussie
+            header("Location: home.php");
+            exit;
+        } else {
+            $message_erreur = "Nom d'utilisateur ou mot de passe incorrect.";
+        }
     } else {
         $message_erreur = "Nom d'utilisateur ou mot de passe incorrect.";
     }
+
+    $conn->close();
 }
 ?>
 <!DOCTYPE html>
