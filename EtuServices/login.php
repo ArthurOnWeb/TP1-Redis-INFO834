@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Vérifier l'authentification dans MySQL
     $mysql_host = 'localhost';
     $mysql_user = 'root';
-    $mysql_password = ''; // Mettez votre mot de passe MySQL ici
+    $mysql_password = 'password'; // Mettez votre mot de passe MySQL ici
     $mysql_database = 'etuServicesDB';
 
     $conn = new mysqli($mysql_host, $mysql_user, $mysql_password, $mysql_database);
