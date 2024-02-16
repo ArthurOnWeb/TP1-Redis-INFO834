@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Analyser la réponse du script Python
         if (trim($resultat) === "Connexion réussie") {
             // Rediriger vers la page d'accueil ou une autre page après la connexion réussie
-            header("Location: home.php");
+            header("Location: accueil.php");
             exit;
         } else {
             $message_erreur = "Nom d'utilisateur ou mot de passe incorrect.";
