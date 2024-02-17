@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         // L'utilisateur est authentifié dans MySQL, vérifiez dans Redis
-        $command = "python3 /var/www/html/TP1-Redis-INFO834/AdminServices/Redislogin.py $nom_utilisateur $mot_de_passe";
+        $command = "/Users/arthu/anaconda3/python /xampp/htdocs/TP1-Redis-INFO834/AdminServices/RedisLogin.py $nom_utilisateur $mot_de_passe";
         $resultat = shell_exec($command);
 
         // Analyser la réponse du script Python
